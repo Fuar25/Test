@@ -4,11 +4,11 @@ def main():
     # 设置页面标题
     st.title("在线视频播放器")
 
-    col1, col2, col3 = st.columns([1, 4, 1])
+    col2, col3 = st.columns([1, 4, 1])
 
-    with col1:
     # 上传视频文件
-        video_file = st.file_uploader("Upload a video file", type=["mp4", "avi", "mov"])
+    video_file = st.file_uploader("Upload a video file", type=["mp4", "avi", "mov"])
+
     with col2:
         video_container = st.empty()
     with col3:
