@@ -5,23 +5,23 @@ def main():
     st.title("Video Player App")
 
     # 添加一些样式
-    # st.markdown(
-    #     """
-    #     <style>
-    #     .file-uploader {
-    #         margin-top: 20px;
-    #         margin-bottom: 20px;
-    #     }
-    #     .centered-button {
-    #         display: flex;
-    #         justify-content: center;
-    #         margin-top: 20px;
-    #         margin-bottom: 20px;
-    #     }
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )
+    st.markdown(
+        """
+        <style>
+        .file-uploader {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .centered-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 200px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # 上传视频文件
     video_file = st.file_uploader("Upload a video file", type=["mp4", "avi", "mov"])
