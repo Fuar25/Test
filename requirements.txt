@@ -42,3 +42,4 @@ urllib3==2.2.2
 watchdog==4.0.2
 opencv-python
 matplotlib
+tensorflow
