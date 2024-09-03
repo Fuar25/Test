@@ -1,53 +1,35 @@
 import streamlit as st
-import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
 import numpy as np
-import matplotlib.pyplot as plt
+from PIL import Image
 
-# 初始化 session state
-if 'page' not in st.session_state:
-    st.session_state.page = 'Page 1'
+# 加载预训练的MobileNetV2模型
+model = MobileNetV2(weights='imagenet')
 
-# 侧边栏选择器
-page = st.sidebar.selectbox("Select a page:", ['Page 1', 'Page 2', 'Page 3'])
+# Streamlit 应用标题
+st.title("图像分类器")
 
-# 根据选择的页面显示相应的内容
-if page == 'Page 1':
-    st.title('Page 1')
-    st.write('Welcome to Page 1!')
+# 图片上传
+uploaded_file = st.file_uploader("选择一张图片...", type=["jpg", "jpeg", "png"])
 
-    # 添加一些数据展示
-    data = pd.DataFrame({
-        'first column': [1, 2, 3, 4],
-        'second column': [10, 20, 30, 40]
-    })
-    st.dataframe(data)
+if uploaded_file is not None:
+    # 打开并显示图像
+    img = Image.open(uploaded_file)
+    st.image(img, caption="上传的图片", use_column_width=True)
 
-    # 添加一个图表
-    chart_data = pd.DataFrame(
-        np.random.randn(20, 3),
-        columns=['a', 'b', 'c'])
+    # 对图像进行预处理
+    img = img.resize((224, 224))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = preprocess_input(img_array)
 
-    st.line_chart(chart_data)
+    # 进行预测
+    predictions = model.predict(img_array)
+    decoded_predictions = decode_predictions(predictions, top=3)[0]
 
-elif page == 'Page 2':
-    st.title('Page 2')
-    st.write('Welcome to Page 2!')
-
-    # 添加一些数据展示
-    st.subheader('Data Frame')
-    df = pd.DataFrame({
-        'first column': [101, 102, 103, 104],
-        'second column': [1001, 1002, 1003, 1004]
-    })
-    st.dataframe(df)
-
-    # 添加一个图表
-    chart_data = pd.DataFrame(
-        np.random.randn(20, 3),
-        columns=['x', 'y', 'z'])
-
-    st.bar_chart(chart_data)
-
-else:
-    st.title('Page 3')
-    st.write('Welcome to Page 3!')
+    # 显示预测结果
+    st.write("预测结果：")
+    for i, (imagenet_id, label, score) in enumerate(decoded_predictions):
+        st.write(f"{i + 1}: {label} ({score:.2%})")
