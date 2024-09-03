@@ -3,11 +3,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 创建三个标签页
-tab1, tab2, tab3 = st.tabs(['Page 1', 'Page 2', 'Page 3'])
+# 初始化 session state
+if 'page' not in st.session_state:
+    st.session_state.page = 'Page 1'
 
-# 在第一个标签页中添加内容
-with tab1:
+# 侧边栏选择器
+page = st.sidebar.selectbox("Select a page:", ['Page 1', 'Page 2', 'Page 3'])
+
+# 根据选择的页面显示相应的内容
+if page == 'Page 1':
     st.title('Page 1')
     st.write('Welcome to Page 1!')
 
@@ -25,8 +29,7 @@ with tab1:
 
     st.line_chart(chart_data)
 
-# 在第二个标签页中添加内容
-with tab2:
+elif page == 'Page 2':
     st.title('Page 2')
     st.write('Welcome to Page 2!')
 
@@ -45,22 +48,6 @@ with tab2:
 
     st.bar_chart(chart_data)
 
-# 在第三个标签页中添加内容
-with tab3:
+else:
     st.title('Page 3')
     st.write('Welcome to Page 3!')
-
-    # 添加一些数据展示
-    st.subheader('Data Frame')
-    df = pd.DataFrame({
-        'first column': [201, 202, 203, 204],
-        'second column': [2001, 2002, 2003, 2004]
-    })
-    st.dataframe(df)
-
-    # 添加一个图表
-    chart_data = pd.DataFrame(
-        np.random.randn(20, 3),
-        columns=['p', 'q', 'r'])
-
-    st.area_chart(chart_data)
